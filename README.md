@@ -6,7 +6,7 @@
 ```sh
 # Load Java
 module load java/jdk-1.8u112
-# Install NextFlow
+# Install Nextflow
 curl -s https://get.nextflow.io | bash
 # Move nextflow executable to a directory in your PATH
 mv nextflow ~/software/bin/nextflow
@@ -53,7 +53,7 @@ csubmitter --status
 ls /n/app/singularity/containers/mk596
 ```
 
-Now change the container paths in the Nextflow config
+Now change the container paths in the Nextflow config:
 
 - ashlar
   ```
