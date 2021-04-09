@@ -32,7 +32,7 @@ nextflow run labsyspharm/mcmicro/exemplar.nf --name exemplar-001 --path ~/scratc
 
 Run the pipeline:
 ```sh
-nextflow run labsyspharm/mcmicro --in ~/scratch/saberfish-mcmicro/exemplar-001 -w ~/scratch/saberfish-mcmicro/work -c ~/scratch/saberfish-mcmicro/mk596.config -with-report "~/scratch/saberfish-mcmicro/reports/$USER-$(date -Is).html"
+nextflow run labsyspharm/mcmicro --in ~/scratch/saberfish-mcmicro/exemplar-001 -w ~/scratch/saberfish-mcmicro/work -c ~/research/saberfish-mcmicro/mk596.config -with-report "~/scratch/saberfish-mcmicro/reports/$USER-$(date -Is).html"
 ```
 
 ## Troubleshoot singularity on O2
