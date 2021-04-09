@@ -21,7 +21,7 @@ java -version
 nextflow -version
 ```
 
-## MCMICRO example data
+## Run with example data
 
 Use the nextflow pipeline to download the example files:
 
