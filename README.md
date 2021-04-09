@@ -53,20 +53,20 @@ csubmitter --status
 ls /n/app/singularity/containers/mk596
 ```
 
-Now change the container path in the Nextflow config
+Now change the container paths in the Nextflow config
 
 - ashlar
-```
-# from
-container = "docker://labsyspharm/ashlar:${params.ashlarVersion}"
-# to
-container = "file:///n/app/singularity/containers/mk596/labsyspharm-ashlar-1.13.0.sif"
-```
+  ```
+  # from
+  container = "docker://labsyspharm/ashlar:${params.ashlarVersion}"
+  # to
+  container = "file:///n/app/singularity/containers/mk596/labsyspharm-ashlar-1.13.0.sif"
+  ```
 
 - unmicst
-```
-# from
-container = "docker://labsyspharm/unmicst:${params.unmicstVersion}"
-# to
-container = "file:///n/app/singularity/containers/mk596/labsyspharm-unmicst-2.6.10.sif"
-```
+  ```
+  # from
+  container = "docker://labsyspharm/unmicst:${params.unmicstVersion}"
+  # to
+  container = "file:///n/app/singularity/containers/mk596/labsyspharm-unmicst-2.6.10.sif"
+  ```
