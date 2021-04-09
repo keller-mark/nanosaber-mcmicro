@@ -1,4 +1,4 @@
-# saberfish mcmicro
+# saberfish mcmicro example
 
 
 ## Installation on O2
