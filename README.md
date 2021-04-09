@@ -1,9 +1,5 @@
 # saberfish mcmicro
 
-MCMICRO
-- [preprint](https://www.biorxiv.org/content/10.1101/2021.03.15.435473v1.full.pdf+html)
-- [docs](https://mcmicro.org/)
-- [github](https://github.com/labsyspharm/mcmicro)
 
 ## Installation on O2
 
