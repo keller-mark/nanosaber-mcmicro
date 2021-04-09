@@ -8,7 +8,7 @@
 module load java/jdk-1.8u112
 # Install Nextflow
 curl -s https://get.nextflow.io | bash
-# Move nextflow executable to a directory in your PATH
+# Move Nextflow executable to a directory in your PATH
 mv nextflow ~/software/bin/nextflow
 ```
 
