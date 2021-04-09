@@ -46,7 +46,7 @@ To fix, locate the singularity image in `~/scratch/saberfish-mcmicro/singularity
 mv ~/scratch/saberfish-mcmicro/singularity/labsyspharm-ashlar-1.13.0.img ~/scratch/saberfish-mcmicro/singularity/labsyspharm-ashlar-1.13.0.sif
 # Submit the image
 module load csubmitter/latest
-csubmitter --name saberfish-mcmicro-ashlar --image-path /n/scratch3/users/m/mk596/saberfish-mcmicro/singularity/labsyspharm-ashlar-1.13.0.sif
+csubmitter --name labsyspharm-ashlar-1.13.0 --image-path /n/scratch3/users/m/mk596/saberfish-mcmicro/singularity/labsyspharm-ashlar-1.13.0.sif
 # Check the status
 csubmitter --status
 # When done processing, locate the verified image
@@ -59,5 +59,5 @@ Now change the container path in the Nextflow config
 # from
 container = "docker://labsyspharm/ashlar:${params.ashlarVersion}"
 # to
-container = "file:///n/app/singularity/containers/mk596/saberfish-mcmicro-ashlar.sif"
+container = "file:///n/app/singularity/containers/mk596/labsyspharm-ashlar-1.13.0.sif"
 ```
