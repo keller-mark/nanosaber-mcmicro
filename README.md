@@ -1,4 +1,4 @@
-# saberfish mcmicro example
+# nanosaber mcmicro example
 
 
 ## Installation on Mac
