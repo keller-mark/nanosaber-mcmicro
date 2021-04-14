@@ -85,27 +85,27 @@ nextflow -version
 Use the nextflow pipeline to download the example files:
 
 ```sh
-mkdir -p ~/scratch/saberfish-mcmicro
-nextflow run labsyspharm/mcmicro/exemplar.nf --name exemplar-001 --path ~/scratch/saberfish-mcmicro
+mkdir -p ~/scratch/nanosaber-mcmicro
+nextflow run labsyspharm/mcmicro/exemplar.nf --name exemplar-001 --path ~/scratch/nanosaber-mcmicro
 ```
 
 Run the pipeline:
 ```sh
-nextflow run labsyspharm/mcmicro --in ~/scratch/saberfish-mcmicro/exemplar-001 -w ~/scratch/saberfish-mcmicro/work -c ~/research/saberfish-mcmicro/mk596.config -with-report "~/scratch/saberfish-mcmicro/reports/$USER-$(date -Is).html"
+nextflow run labsyspharm/mcmicro --in ~/scratch/nanosaber-mcmicro/exemplar-001 -w ~/scratch/nanosaber-mcmicro/work -c ~/research/nanosaber-mcmicro/mk596.config -with-report "~/scratch/nanosaber-mcmicro/reports/$USER-$(date -Is).html"
 ```
 
 ## Troubleshoot singularity on O2
 
 When using the pipeline on O2, you may run into this error: `singularity image is not in an allowed configured path`
 
-To fix, locate the singularity image in `~/scratch/saberfish-mcmicro/singularity/` and submit it for [automated testing](https://wiki.rc.hms.harvard.edu/display/O2/Running+Singularity+Containers+in+O2):
+To fix, locate the singularity image in `~/scratch/nanosaber-mcmicro/singularity/` and submit it for [automated testing](https://wiki.rc.hms.harvard.edu/display/O2/Running+Singularity+Containers+in+O2):
 
 ```sh
 # Change to a singularity image extension recognized by O2
-mv ~/scratch/saberfish-mcmicro/singularity/labsyspharm-ashlar-1.13.0.img ~/scratch/saberfish-mcmicro/singularity/labsyspharm-ashlar-1.13.0.sif
+mv ~/scratch/nanosaber-mcmicro/singularity/labsyspharm-ashlar-1.13.0.img ~/scratch/nanosaber-mcmicro/singularity/labsyspharm-ashlar-1.13.0.sif
 # Submit the image
 module load csubmitter/latest
-csubmitter --name labsyspharm-ashlar-1.13.0 --image-path /n/scratch3/users/m/mk596/saberfish-mcmicro/singularity/labsyspharm-ashlar-1.13.0.sif
+csubmitter --name labsyspharm-ashlar-1.13.0 --image-path /n/scratch3/users/m/mk596/nanosaber-mcmicro/singularity/labsyspharm-ashlar-1.13.0.sif
 # Check the status
 csubmitter --status
 # When done processing, locate the verified image
@@ -116,7 +116,7 @@ To pull all of the other containers and submit:
 
 
 ```sh
-cd ~/scratch/saberfish-mcmicro/singularity
+cd ~/scratch/nanosaber-mcmicro/singularity
 
 # illumination
 singularity pull docker://labsyspharm/basic-illumination:1.0.1

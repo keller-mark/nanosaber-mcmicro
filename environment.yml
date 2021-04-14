@@ -1,4 +1,4 @@
-name: saberfish-mcmicro-env
+name: nanosaber-mcmicro-env
 channels:
   - conda-forge
   - bioconda
