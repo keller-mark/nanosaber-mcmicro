@@ -55,7 +55,13 @@ Stack the three multi-channel registered images with Image > Stacks > Tools > Co
 With the registered image saved to `data/lung/registration/lung.ome.tif`, run the remaining parts of the mcmicro pipeline:
 
 ```sh
-nextflow run labsyspharm/mcmicro --in ./data/lung --start-at probability-maps -w ./work -with-report "./reports/index.html"
+nextflow run labsyspharm/mcmicro \
+  --in ./data/lung \
+  --start-at probability-maps \
+  --unmicst-opts '--scalingFactor 1' \
+  --s3seg-opts '--logSigma 1 10' \
+  -w ./work \
+  -with-report "./reports/index.html"
 ```
 
 <!--
