@@ -58,8 +58,8 @@ With the registered image saved to `data/lung/registration/lung.ome.tif`, run th
 nextflow run labsyspharm/mcmicro \
   --in ./data/lung \
   --start-at probability-maps \
-  --unmicst-opts '--scalingFactor 1' \
-  --s3seg-opts '--logSigma 1 10' \
+  --unmicst-opts '--scalingFactor 1.5 --channel 0' \
+  --s3seg-opts '--logSigma 0 10' \
   -w ./work \
   -with-report "./reports/index.html"
 ```

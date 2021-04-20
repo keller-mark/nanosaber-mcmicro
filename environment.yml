@@ -8,8 +8,17 @@ dependencies:
   - pyfftw
   - itk
   - jupyterlab
+  - tifffile
+  - pandas
+  - altair
+  - altair_saver
+  - scipy
+  - anndata
+  - snakemake>=6.0
+  - seaborn
+  - scikit-learn
   - pip
   - pip:
     - ashlar
     - wsireg
-    - napari
+    - 'napari[all]'
