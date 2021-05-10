@@ -22,3 +22,4 @@ dependencies:
     - ashlar
     - wsireg
     - 'napari[all]'
+    - flowcytometrytools
