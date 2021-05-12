@@ -17,6 +17,7 @@ dependencies:
   - snakemake>=6.0
   - seaborn
   - scikit-learn
+  - openpyxl
   - pip
   - pip:
     - ashlar
