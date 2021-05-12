@@ -56,10 +56,146 @@ With the registered image saved to `data/lung/registration/lung.ome.tif`, run th
 
 ```sh
 nextflow run labsyspharm/mcmicro \
-  --in ./data/lung \
+  --in ./data/lung_2_1 \
+  --start-at probability-maps \
+  --unmicst-opts '--scalingFactor 1.7 --channel 0' \
+  --s3seg-opts '--logSigma 0 15' \
+  -w ./work \
+  -with-report "./reports/index.html"
+```
+
+
+## Lung 1.1
+
+```
+# Register all cycle 3 images onto cycle 2 DAPI channel
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_1_1/raw/lung_1_1-cycle-02-channel-01.tif \
+  data/lung_1_1/raw/lung_1_1-cycle-03-channel-01.tif \
+  data/lung_1_1/out/lung_1_1-cycle-03-channel-01_direct_transf.txt \
+  data/lung_1_1/raw/lung_1_1-cycle-03-channel-01-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_1_1/raw/lung_1_1-cycle-02-channel-01.tif \
+  data/lung_1_1/raw/lung_1_1-cycle-03-channel-02.tif \
+  data/lung_1_1/out/lung_1_1-cycle-03-channel-01_direct_transf.txt \
+  data/lung_1_1/raw/lung_1_1-cycle-03-channel-02-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_1_1/raw/lung_1_1-cycle-02-channel-01.tif \
+  data/lung_1_1/raw/lung_1_1-cycle-03-channel-03.tif \
+  data/lung_1_1/out/lung_1_1-cycle-03-channel-01_direct_transf.txt \
+  data/lung_1_1/raw/lung_1_1-cycle-03-channel-03-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_1_1/raw/lung_1_1-cycle-02-channel-01.tif \
+  data/lung_1_1/raw/lung_1_1-cycle-03-channel-04.tif \
+  data/lung_1_1/out/lung_1_1-cycle-03-channel-01_direct_transf.txt \
+  data/lung_1_1/raw/lung_1_1-cycle-03-channel-04-registered.tif
+  
+# Register all cycle 1 images onto cycle 2 DAPI channel
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_1_1/raw/lung_1_1-cycle-02-channel-01.tif \
+  data/lung_1_1/raw/lung_1_1-cycle-01-channel-01.tif \
+  data/lung_1_1/out/lung_1_1-cycle-01-channel-01_direct_transf.txt \
+  data/lung_1_1/raw/lung_1_1-cycle-01-channel-01-registered.tif
+  
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_1_1/raw/lung_1_1-cycle-02-channel-01.tif \
+  data/lung_1_1/raw/lung_1_1-cycle-01-channel-02.tif \
+  data/lung_1_1/out/lung_1_1-cycle-01-channel-01_direct_transf.txt \
+  data/lung_1_1/raw/lung_1_1-cycle-01-channel-02-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_1_1/raw/lung_1_1-cycle-02-channel-01.tif \
+  data/lung_1_1/raw/lung_1_1-cycle-01-channel-03.tif \
+  data/lung_1_1/out/lung_1_1-cycle-01-channel-01_direct_transf.txt \
+  data/lung_1_1/raw/lung_1_1-cycle-01-channel-03-registered.tif
+
+nextflow run labsyspharm/mcmicro \
+  --in ./data/lung_1_1 \
+  --start-at probability-maps \
+  --unmicst-opts '--scalingFactor 1.7 --channel 3' \
+  --s3seg-opts '--logSigma 0 15' \
+  -w ./work \
+  -with-report "./reports/index.html"
+
+```
+
+## Lung 2.1
+
+```sh
+nextflow run labsyspharm/mcmicro \
+  --in ./data/lung_2_1 \
+  --start-at probability-maps \
+  --unmicst-opts '--scalingFactor 1.7 --channel 0' \
+  --s3seg-opts '--logSigma 0 15' \
+  -w ./work \
+  -with-report "./reports/index.html"
+```
+
+## Lung 2.2
+
+```sh
+# Register all cycle 1 images onto cycle 2 DAPI channel
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_2/raw/lung_2_2-cycle-02-channel-01.tif \
+  data/lung_2_2/raw/lung_2_2-cycle-01-channel-01.tif \
+  data/lung_2_2/out/lung_2_2-cycle-01-channel-01_direct_transf.txt \
+  data/lung_2_2/raw/lung_2_2-cycle-01-channel-01-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_2/raw/lung_2_2-cycle-02-channel-01.tif \
+  data/lung_2_2/raw/lung_2_2-cycle-01-channel-02.tif \
+  data/lung_2_2/out/lung_2_2-cycle-01-channel-01_direct_transf.txt \
+  data/lung_2_2/raw/lung_2_2-cycle-01-channel-02-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_2/raw/lung_2_2-cycle-02-channel-01.tif \
+  data/lung_2_2/raw/lung_2_2-cycle-01-channel-03.tif \
+  data/lung_2_2/out/lung_2_2-cycle-01-channel-01_direct_transf.txt \
+  data/lung_2_2/raw/lung_2_2-cycle-01-channel-03-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_2/raw/lung_2_2-cycle-02-channel-01.tif \
+  data/lung_2_2/raw/lung_2_2-cycle-01-channel-04.tif \
+  data/lung_2_2/out/lung_2_2-cycle-01-channel-01_direct_transf.txt \
+  data/lung_2_2/raw/lung_2_2-cycle-01-channel-04-registered.tif
+
+# Register all cycle 3 images onto cycle 2 DAPI channel
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_2/raw/lung_2_2-cycle-02-channel-01.tif \
+  data/lung_2_2/raw/lung_2_2-cycle-03-channel-01.tif \
+  data/lung_2_2/out/lung_2_2-cycle-03-channel-01_direct_transf.txt \
+  data/lung_2_2/raw/lung_2_2-cycle-03-channel-01-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_2/raw/lung_2_2-cycle-02-channel-01.tif \
+  data/lung_2_2/raw/lung_2_2-cycle-03-channel-02.tif \
+  data/lung_2_2/out/lung_2_2-cycle-03-channel-01_direct_transf.txt \
+  data/lung_2_2/raw/lung_2_2-cycle-03-channel-02-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_2/raw/lung_2_2-cycle-02-channel-01.tif \
+  data/lung_2_2/raw/lung_2_2-cycle-03-channel-03.tif \
+  data/lung_2_2/out/lung_2_2-cycle-03-channel-01_direct_transf.txt \
+  data/lung_2_2/raw/lung_2_2-cycle-03-channel-03-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_2/raw/lung_2_2-cycle-02-channel-01.tif \
+  data/lung_2_2/raw/lung_2_2-cycle-03-channel-04.tif \
+  data/lung_2_2/out/lung_2_2-cycle-03-channel-01_direct_transf.txt \
+  data/lung_2_2/raw/lung_2_2-cycle-03-channel-04-registered.tif
+
+nextflow run labsyspharm/mcmicro \
+  --in ./data/lung_2_2 \
   --start-at probability-maps \
   --unmicst-opts '--scalingFactor 1.5 --channel 0' \
-  --s3seg-opts '--logSigma 0 10' \
+  --s3seg-opts '--logSigma 0 15' \
   -w ./work \
   -with-report "./reports/index.html"
 ```
