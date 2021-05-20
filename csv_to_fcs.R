@@ -1,4 +1,6 @@
 # https://www.researchgate.net/post/Does_anyone_know_how_to_convert_a_csv_file_to_a_fcs_file
+# https://bioconductor.org/packages/release/bioc/html/flowCore.html
+# https://www.rdocumentation.org/packages/flowCore/versions/1.38.2/topics/write.FCS
 
 library(Biobase)
 library(flowCore)
