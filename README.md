@@ -12,6 +12,10 @@ curl -s https://get.nextflow.io | bash
 
 Move the Nextflow executable to a directory in your PATH.
 
+Install bioformats: download the command-line tools from http://www.openmicroscopy.org/bio-formats/downloads/
+
+Move the `bftools` directory to `~/software/bftools`
+
 ## Use FIJI to stack the channels for the first cycle
 
 For cycle 01, open the four `.tif` files (one for each channel) in FIJI.
@@ -199,6 +203,65 @@ nextflow run labsyspharm/mcmicro \
   -w ./work \
   -with-report "./reports/index.html"
 ```
+
+### Prepare for visualization with Vitessce
+
+Open the registered 12-channel TIFF in ImageJ to convert the Z-stack to a channel stack.
+- Image -> Hyperstacks -> Stack to Hyperstack
+- 12 channel slices, 1 z slice
+
+Convert TIFF files to OME-TIFF using bioformats
+
+```sh
+bash ~/software/bftools/bfconvert ./data/lung_1_1/registration/lung_1_1.tif ./data/lung_1_1/registration/lung_1_1.ome.tiff
+
+bash ~/software/bftools/bfconvert ./data/lung_1_1/segmentation/unmicst-lung_1_1/cellMask.tif ./data/lung_1_1/segmentation/unmicst-lung_1_1/cellMask.ome.tiff
+```
+
+```sh
+bash ~/software/bftools/bfconvert ./data/lung_2_1/registration/lung_2_1.ome.tif ./data/lung_2_1/registration/lung_2_1.ome.tiff
+
+bash ~/software/bftools/bfconvert ./data/lung_2_1/segmentation/unmicst-lung_2_1/cellMask.tif ./data/lung_2_1/segmentation/unmicst-lung_2_1/cellMask.ome.tiff
+```
+
+```sh
+bash ~/software/bftools/bfconvert ./data/lung_2_2/registration/lung_2_2.tif ./data/lung_2_2/registration/lung_2_2.ome.tiff
+
+bash ~/software/bftools/bfconvert ./data/lung_2_2/segmentation/unmicst-lung_2_2/cellMask.tif ./data/lung_2_2/segmentation/unmicst-lung_2_2/cellMask.ome.tiff
+```
+
+## Vitessce instances
+
+### Local
+
+http://localhost:3000/?dataset=nanosaber-lung_1_1
+
+http://localhost:3000/?dataset=nanosaber-lung_2_1
+
+http://localhost:3000/?dataset=nanosaber-lung_2_2
+
+### Cloud
+
+Lung 1.1
+
+```
+https://s3.amazonaws.com/vitessce-data/demos/2021-05-24/a1802c9/index.html?url=data:,{"name":"lung_1_1","version":"1.0.1","description":"","public":true,"datasets":[{"uid":"lung_1_1","name":"lung_1_1","description":"lung_1_1","files":[{"type":"raster","fileType":"raster.json","options":{"schemaVersion":"0.0.2","usePhysicalSizeScaling":false,"images":[{"name":"Mask","type":"ome-tiff","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_1_1/segmentation/unmicst-lung_1_1/cellMask.ome.tiff","metadata":{"isBitmask":true,"transform":{"matrix":[1.0331,0,0,0,0,1.0331,0,0,0,0,1,0,0,0,0,1]}}},{"name":"Image","type":"ome-tiff","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_1_1/registration/lung_1_1.ome.tiff","metadata":{"isBitmask":false}}],"renderLayers":["Image","Mask"]}},{"type":"cell-sets","fileType":"cell-sets.json","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_1_1/flowcore/lung_1_1.cell-sets.json"},{"type":"cells","fileType":"cells.json","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_1_1/flowcore/lung_1_1.cells.json"}]}],"initStrategy":"auto","coordinationSpace":{},"layout":[{"component":"description","x":0,"y":0,"w":2,"h":1},{"component":"layerController","x":10,"y":0,"w":2,"h":4},{"component":"status","x":0,"y":1,"w":2,"h":1},{"component":"spatial","coordinationScopes":{},"x":2,"y":0,"w":8,"h":4},{"component":"cellSets","x":0,"y":2,"w":2,"h":2}]}
+
+```
+
+Lung 2.1
+
+```
+https://s3.amazonaws.com/vitessce-data/demos/2021-05-24/a1802c9/index.html?url=data:,{"name":"lung_2_1","version":"1.0.1","description":"","public":true,"datasets":[{"uid":"lung_2_1","name":"lung_2_1","description":"lung_2_1","files":[{"type":"raster","fileType":"raster.json","options":{"schemaVersion":"0.0.2","usePhysicalSizeScaling":false,"images":[{"name":"Mask","type":"ome-tiff","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_2_1/segmentation/unmicst-lung_2_1/cellMask.ome.tiff","metadata":{"isBitmask":true,"transform":{"matrix":[1.0234,0,0,0,0,1.0234,0,0,0,0,1,0,0,0,0,1]}}},{"name":"Image","type":"ome-tiff","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_2_1/registration/lung_2_1.ome.tiff","metadata":{"isBitmask":false}}],"renderLayers":["Image","Mask"]}},{"type":"cell-sets","fileType":"cell-sets.json","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_2_1/flowcore/lung_2_1.cell-sets.json"},{"type":"cells","fileType":"cells.json","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_2_1/flowcore/lung_2_1.cells.json"}]}],"initStrategy":"auto","coordinationSpace":{},"layout":[{"component":"description","x":0,"y":0,"w":2,"h":1},{"component":"layerController","x":10,"y":0,"w":2,"h":4},{"component":"status","x":0,"y":1,"w":2,"h":1},{"component":"spatial","coordinationScopes":{},"x":2,"y":0,"w":8,"h":4},{"component":"cellSets","x":0,"y":2,"w":2,"h":2}]}
+```
+
+Lung 2.2
+
+```
+https://s3.amazonaws.com/vitessce-data/demos/2021-05-24/a1802c9/index.html?url=data:,{"name":"lung_2_2","version":"1.0.1","description":"","public":true,"datasets":[{"uid":"lung_2_2","name":"lung_2_2","description":"lung_2_2","files":[{"type":"raster","fileType":"raster.json","options":{"schemaVersion":"0.0.2","usePhysicalSizeScaling":false,"images":[{"name":"Mask","type":"ome-tiff","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_2_2/segmentation/unmicst-lung_2_2/cellMask.ome.tiff","metadata":{"isBitmask":true,"transform":{"matrix":[1.167,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]}}},{"name":"Image","type":"ome-tiff","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_2_2/registration/lung_2_2.ome.tiff","metadata":{"isBitmask":false}}],"renderLayers":["Image","Mask"]}},{"type":"cell-sets","fileType":"cell-sets.json","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_2_2/flowcore/lung_2_2.cell-sets.json"},{"type":"cells","fileType":"cells.json","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_2_2/flowcore/lung_2_2.cells.json"}]}],"initStrategy":"auto","coordinationSpace":{},"layout":[{"component":"description","x":0,"y":0,"w":2,"h":1},{"component":"layerController","x":10,"y":0,"w":2,"h":4},{"component":"status","x":0,"y":1,"w":2,"h":1},{"component":"spatial","coordinationScopes":{},"x":2,"y":0,"w":8,"h":4},{"component":"cellSets","x":0,"y":2,"w":2,"h":2}]}
+
+```
+
 
 <!--
 
