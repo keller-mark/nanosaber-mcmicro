@@ -216,18 +216,30 @@ Convert TIFF files to OME-TIFF using bioformats
 bash ~/software/bftools/bfconvert ./data/lung_1_1/registration/lung_1_1.tif ./data/lung_1_1/registration/lung_1_1.ome.tiff
 
 bash ~/software/bftools/bfconvert ./data/lung_1_1/segmentation/unmicst-lung_1_1/cellMask.tif ./data/lung_1_1/segmentation/unmicst-lung_1_1/cellMask.ome.tiff
+
+tiffcomment ./data/lung_1_1/registration/lung_1_1.ome.tiff > ./data/lung_1_1/registration/lung_1_1.in.ome.xml
+python add_channel_names.py -s lung_1_1
+tiffcomment -set './data/lung_1_1/registration/lung_1_1.out.ome.xml' ./data/lung_1_1/registration/lung_1_1.ome.tiff
 ```
 
 ```sh
 bash ~/software/bftools/bfconvert ./data/lung_2_1/registration/lung_2_1.ome.tif ./data/lung_2_1/registration/lung_2_1.ome.tiff
 
 bash ~/software/bftools/bfconvert ./data/lung_2_1/segmentation/unmicst-lung_2_1/cellMask.tif ./data/lung_2_1/segmentation/unmicst-lung_2_1/cellMask.ome.tiff
+
+tiffcomment ./data/lung_2_1/registration/lung_2_1.ome.tiff > ./data/lung_2_1/registration/lung_2_1.in.ome.xml
+python add_channel_names.py -s lung_2_1
+tiffcomment -set './data/lung_2_1/registration/lung_2_1.out.ome.xml' ./data/lung_2_1/registration/lung_2_1.ome.tiff
 ```
 
 ```sh
 bash ~/software/bftools/bfconvert ./data/lung_2_2/registration/lung_2_2.tif ./data/lung_2_2/registration/lung_2_2.ome.tiff
 
 bash ~/software/bftools/bfconvert ./data/lung_2_2/segmentation/unmicst-lung_2_2/cellMask.tif ./data/lung_2_2/segmentation/unmicst-lung_2_2/cellMask.ome.tiff
+
+tiffcomment ./data/lung_2_2/registration/lung_2_2.ome.tiff > ./data/lung_2_2/registration/lung_2_2.in.ome.xml
+python add_channel_names.py -s lung_2_2
+tiffcomment -set './data/lung_2_2/registration/lung_2_2.out.ome.xml' ./data/lung_2_2/registration/lung_2_2.ome.tiff
 ```
 
 ## Vitessce instances
@@ -246,7 +258,6 @@ Lung 1.1
 
 ```
 https://s3.amazonaws.com/vitessce-data/demos/2021-05-24/a1802c9/index.html?url=data:,{"name":"lung_1_1","version":"1.0.1","description":"","public":true,"datasets":[{"uid":"lung_1_1","name":"lung_1_1","description":"lung_1_1","files":[{"type":"raster","fileType":"raster.json","options":{"schemaVersion":"0.0.2","usePhysicalSizeScaling":false,"images":[{"name":"Mask","type":"ome-tiff","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_1_1/segmentation/unmicst-lung_1_1/cellMask.ome.tiff","metadata":{"isBitmask":true,"transform":{"matrix":[1.0331,0,0,0,0,1.0331,0,0,0,0,1,0,0,0,0,1]}}},{"name":"Image","type":"ome-tiff","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_1_1/registration/lung_1_1.ome.tiff","metadata":{"isBitmask":false}}],"renderLayers":["Image","Mask"]}},{"type":"cell-sets","fileType":"cell-sets.json","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_1_1/flowcore/lung_1_1.cell-sets.json"},{"type":"cells","fileType":"cells.json","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_1_1/flowcore/lung_1_1.cells.json"}]}],"initStrategy":"auto","coordinationSpace":{},"layout":[{"component":"description","x":0,"y":0,"w":2,"h":1},{"component":"layerController","x":10,"y":0,"w":2,"h":4},{"component":"status","x":0,"y":1,"w":2,"h":1},{"component":"spatial","coordinationScopes":{},"x":2,"y":0,"w":8,"h":4},{"component":"cellSets","x":0,"y":2,"w":2,"h":2}]}
-
 ```
 
 Lung 2.1
@@ -259,7 +270,6 @@ Lung 2.2
 
 ```
 https://s3.amazonaws.com/vitessce-data/demos/2021-05-24/a1802c9/index.html?url=data:,{"name":"lung_2_2","version":"1.0.1","description":"","public":true,"datasets":[{"uid":"lung_2_2","name":"lung_2_2","description":"lung_2_2","files":[{"type":"raster","fileType":"raster.json","options":{"schemaVersion":"0.0.2","usePhysicalSizeScaling":false,"images":[{"name":"Mask","type":"ome-tiff","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_2_2/segmentation/unmicst-lung_2_2/cellMask.ome.tiff","metadata":{"isBitmask":true,"transform":{"matrix":[1.167,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]}}},{"name":"Image","type":"ome-tiff","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_2_2/registration/lung_2_2.ome.tiff","metadata":{"isBitmask":false}}],"renderLayers":["Image","Mask"]}},{"type":"cell-sets","fileType":"cell-sets.json","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_2_2/flowcore/lung_2_2.cell-sets.json"},{"type":"cells","fileType":"cells.json","url":"https://storage.googleapis.com/vitessce-demo-data/nanosaber-mcmicro/lung_2_2/flowcore/lung_2_2.cells.json"}]}],"initStrategy":"auto","coordinationSpace":{},"layout":[{"component":"description","x":0,"y":0,"w":2,"h":1},{"component":"layerController","x":10,"y":0,"w":2,"h":4},{"component":"status","x":0,"y":1,"w":2,"h":1},{"component":"spatial","coordinationScopes":{},"x":2,"y":0,"w":8,"h":4},{"component":"cellSets","x":0,"y":2,"w":2,"h":2}]}
-
 ```
 
 
