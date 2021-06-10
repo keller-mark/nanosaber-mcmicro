@@ -6,6 +6,8 @@ sample_id <- "lung_2_1"
 sample_dir <- file.path("~", "research", "dbmi", "nanosaber-mcmicro", "data", sample_id)
 quant_data <- read.csv(file.path(sample_dir, "quantification", paste0("unmicst-", sample_id, ".csv")), header = TRUE, sep = ",", stringsAsFactors = FALSE, row.names = 1)
 
+cell_class_data <- read.csv(file.path(sample_dir, "flowcore", paste0(sample_id, ".giotto_cell_classes.csv")), header = TRUE, sep = ",", stringsAsFactors = FALSE, row.names = 1)
+
 quant_cols <- colnames(quant_data)
 cellmask_cols <- quant_cols[grep("_cellMask$", quant_cols)]
 
@@ -17,6 +19,12 @@ gobject <- createGiottoObject(
   raw_exprs = raw_exprs,
   spatial_locs = spatial_locs,
   norm_expr = raw_exprs,
+)
+
+gobject <- addCellMetadata(
+  gobject,
+  cell_class_data[, c("name")],
+  vector_name = "fc_class"
 )
 
 gobject <- createSpatialNetwork(
@@ -64,7 +72,84 @@ heatmSpatialCorGenes(
   default_save_name = "heatmSpatialCorGenes",
 )
 
+spatCorObject <- clusterSpatialCorGenes(
+  spatCorObject,
+  name = "spat_clus",
+  hclust_method = "ward.D",
+  k = 10,
+  return_obj = TRUE
+)
 
 
-showNetworks(gobject, verbose = TRUE)
-spatPlot(gobject)
+rankSpatialCorGroups(
+  gobject,
+  spatCorObject,
+  use_clus_name = "spat_clus",
+  show_plot = NA,
+  return_plot = FALSE,
+  save_plot = NA,
+  save_param = list(),
+  default_save_name = "rankSpatialCorGroups"
+)
+
+
+
+gobject <- createSpatialDelaunayNetwork(
+  gobject,
+  method = "deldir",
+  dimensions = "all",
+  name = "Delaunay_network",
+  maximum_distance = "auto",
+  minimum_k = 0,
+  options = "Pp",
+  Y = TRUE,
+  j = TRUE,
+  S = 0,
+  verbose = T,
+  return_gobject = TRUE,
+)
+plotStatDelaunayNetwork(
+  gobject,
+  method = "deldir",
+  dimensions = "all",
+  maximum_distance = "auto",
+  minimum_k = 0,
+  options = "Pp",
+  Y = TRUE,
+  j = TRUE,
+  S = 0,
+  show_plot = NA,
+  return_plot = NA,
+  save_plot = NA,
+  save_param = list(),
+  default_save_name = "plotStatDelaunayNetwork",
+)
+
+CPscore <- cellProximityEnrichment(
+  gobject,
+  spatial_network_name = "spatial_network",
+  cluster_column = "fc_class",
+  number_of_simulations = 1000,
+  adjust_method = "none",
+  set_seed = TRUE,
+  seed_number = 1234
+)
+cellProximityBarplot(
+  gobject,
+  CPscore,
+  min_orig_ints = 5,
+  min_sim_ints = 5,
+  p_val = 0.05,
+  show_plot = NA,
+  return_plot = NA,
+  save_plot = NA,
+  save_param = list(),
+  default_save_name = "cellProximityBarplot"
+)
+
+
+
+
+
+
+
