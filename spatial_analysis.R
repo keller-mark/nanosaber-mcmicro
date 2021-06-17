@@ -2,6 +2,7 @@ library(Giotto)
 library(Matrix)
 
 sample_id <- "lung_2_1"
+sample_name <- "Lung 2.1"
 
 sample_dir <- file.path("~", "research", "dbmi", "nanosaber-mcmicro", "data", sample_id)
 quant_data <- read.csv(file.path(sample_dir, "quantification", paste0("unmicst-", sample_id, ".csv")), header = TRUE, sep = ",", stringsAsFactors = FALSE, row.names = 1)
@@ -12,6 +13,7 @@ quant_cols <- colnames(quant_data)
 cellmask_cols <- quant_cols[grep("_cellMask$", quant_cols)]
 
 raw_exprs <- t(as.matrix(quant_data[,cellmask_cols]))
+rownames(raw_exprs) <- gsub("_cellMask", "", rownames(raw_exprs))
 
 spatial_locs <- quant_data[, c("X_centroid", "Y_centroid")]
 
@@ -26,6 +28,41 @@ gobject <- addCellMetadata(
   cell_class_data[, c("name")],
   vector_name = "fc_class"
 )
+
+
+# detectSpatialCorGenes not working with the "grid" method
+#######
+
+# gobject <- createSpatialGrid(
+#   gobject,
+#   name = "spatial_grid",
+#   method = "default",
+#   sdimx_stepsize = 1,
+#   sdimy_stepsize = 1,
+#   sdimz_stepsize = NULL,
+#   minimum_padding = 1,
+#   return_gobject = TRUE
+# )
+# 
+# annotateSpatialGrid(
+#   gobject,
+#   spatial_grid_name = "spatial_grid",
+#   cluster_columns = "fc_class"
+# )
+# 
+# spatPlot(gobject, cell_color = "fc_class", point_size = 2)
+# 
+# gridSpatCorObj <- detectSpatialCorGenes(
+#   gobject,
+#   method = "grid",
+#   expression_values = "normalized",
+#   spatial_grid_name = "spatial_grid",
+#   min_cells_per_grid = 4,
+#   cor_method = "pearson"
+# )
+
+
+
 
 gobject <- createSpatialNetwork(
   gobject,
@@ -71,6 +108,19 @@ heatmSpatialCorGenes(
   save_param = list(),
   default_save_name = "heatmSpatialCorGenes",
 )
+
+rankSpatialCorGroups(
+  gobject,
+  spatCorObject,
+  use_clus_name = "name",
+  show_plot = NA,
+  return_plot = FALSE,
+  save_plot = NA,
+  save_param = list(),
+  default_save_name = "rankSpatialCorGroups"
+)
+
+
 
 spatCorObject <- clusterSpatialCorGenes(
   spatCorObject,
