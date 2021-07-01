@@ -13,3 +13,6 @@ reports/
 *.csv
 *.tif
 .Rhistory
+backups/
+temp_plots/
+.snakemake/

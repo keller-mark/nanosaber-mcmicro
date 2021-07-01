@@ -22,31 +22,29 @@ For cycle 01, open the four `.tif` files (one for each channel) in FIJI.
 - Click Image > Stacks > Images to Stack
 - Save as a Tiff file called `lung-cycle-01.tif`
 
+```sh
+export IJDIR=/Applications/Fiji.app
+java -jar -Xmx4096m $IJDIR/jars/ij-1.53c.jar -batch ~/research/dbmi/nanosaber-mcmicro/macros/cycle-to-stack.js lung_1_1__cycle-01
+
+java -jar -Xmx4096m $IJDIR/jars/ij-1.53c.jar -ijpath /Applications/Fiji.app/ -batch ~/research/dbmi/nanosaber-mcmicro/src/register-with-dapi.js lung_1_1
+```
+
 ## Register with bUnwarpJ
 
 Open the single-channel images for DAPI (channel 01) for the three cycles.
 
-Align cycles 02 and 03 to target cycle 01, with the `Save Transformation` option checked in bUnwarpJ (under Plugins > Registration > bUnwarpJ), using the mono mode.
+Align cycles 01 and 03 to target cycle 02, with the `Save Transformation` option checked in bUnwarpJ (under Plugins > Registration > bUnwarpJ), using the mono mode.
 
 Save the transformations to a new `data/lung/out` directory.
 
 https://imagej.net/BUnwarpJ.html#Command_line_call
 
 ```
-export IJDIR=/Applications/Fiji.app
 java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -help
+```
 
-# Register all cycle 2 images to the cycle 1 DAPI channel
-java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform data/lung/raw/lung-cycle-01-channel-01.tif data/lung/raw/lung-cycle-02-channel-01.tif data/lung/out/lung-cycle-02-channel-01_direct_transf.txt data/lung/raw/lung-cycle-02-channel-01-registered.tif
-java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform data/lung/raw/lung-cycle-01-channel-01.tif data/lung/raw/lung-cycle-02-channel-02.tif data/lung/out/lung-cycle-02-channel-01_direct_transf.txt data/lung/raw/lung-cycle-02-channel-02-registered.tif
-java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform data/lung/raw/lung-cycle-01-channel-01.tif data/lung/raw/lung-cycle-02-channel-03.tif data/lung/out/lung-cycle-02-channel-01_direct_transf.txt data/lung/raw/lung-cycle-02-channel-03-registered.tif
-java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform data/lung/raw/lung-cycle-01-channel-01.tif data/lung/raw/lung-cycle-02-channel-04.tif data/lung/out/lung-cycle-02-channel-01_direct_transf.txt data/lung/raw/lung-cycle-02-channel-04-registered.tif
-
-# Register all cycle 3 images to the cycle 1 DAPI channel
-java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform data/lung/raw/lung-cycle-01-channel-01.tif data/lung/raw/lung-cycle-03-channel-01.tif data/lung/out/lung-cycle-03-channel-01_direct_transf.txt data/lung/raw/lung-cycle-03-channel-01-registered.tif
-java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform data/lung/raw/lung-cycle-01-channel-01.tif data/lung/raw/lung-cycle-03-channel-02.tif data/lung/out/lung-cycle-03-channel-01_direct_transf.txt data/lung/raw/lung-cycle-03-channel-02-registered.tif
-java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform data/lung/raw/lung-cycle-01-channel-01.tif data/lung/raw/lung-cycle-03-channel-03.tif data/lung/out/lung-cycle-03-channel-01_direct_transf.txt data/lung/raw/lung-cycle-03-channel-03-registered.tif
-java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform data/lung/raw/lung-cycle-01-channel-01.tif data/lung/raw/lung-cycle-03-channel-04.tif data/lung/out/lung-cycle-03-channel-01_direct_transf.txt data/lung/raw/lung-cycle-03-channel-04-registered.tif
+```
+# Here, register the images using the commands below for each sample
 ```
 
 Next, change the [type of the registered images](https://imagej.net/BUnwarpJ.html#My_result_images_are_32-bit_although_my_input_images_are_8-bit.2C_is_that_a_bug.3F) to 16 bit with Image > Type > 16 bit. For the cycle 01 stack (which did not need registration), change to 32 bit and then back to 16 bit so that the bit depth scales properly.
@@ -67,7 +65,6 @@ nextflow run labsyspharm/mcmicro \
   -w ./work \
   -with-report "./reports/index.html"
 ```
-
 
 ## Lung 1.1
 
@@ -131,10 +128,62 @@ nextflow run labsyspharm/mcmicro \
 ## Lung 2.1
 
 ```sh
+# Register all cycle 3 images onto cycle 2 DAPI channel
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_1/raw/lung_2_1-cycle-02-channel-01.tif \
+  data/lung_2_1/raw/lung_2_1-cycle-03-channel-01.tif \
+  data/lung_2_1/out/lung_2_1-cycle-03-channel-01_direct_transf.txt \
+  data/lung_2_1/raw/lung_2_1-cycle-03-channel-01-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_1/raw/lung_2_1-cycle-02-channel-01.tif \
+  data/lung_2_1/raw/lung_2_1-cycle-03-channel-02.tif \
+  data/lung_2_1/out/lung_2_1-cycle-03-channel-01_direct_transf.txt \
+  data/lung_2_1/raw/lung_2_1-cycle-03-channel-02-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_1/raw/lung_2_1-cycle-02-channel-01.tif \
+  data/lung_2_1/raw/lung_2_1-cycle-03-channel-03.tif \
+  data/lung_2_1/out/lung_2_1-cycle-03-channel-01_direct_transf.txt \
+  data/lung_2_1/raw/lung_2_1-cycle-03-channel-03-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_1/raw/lung_2_1-cycle-02-channel-01.tif \
+  data/lung_2_1/raw/lung_2_1-cycle-03-channel-04.tif \
+  data/lung_2_1/out/lung_2_1-cycle-03-channel-01_direct_transf.txt \
+  data/lung_2_1/raw/lung_2_1-cycle-03-channel-04-registered.tif
+  
+# Register all cycle 1 images onto cycle 2 DAPI channel
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_1/raw/lung_2_1-cycle-02-channel-01.tif \
+  data/lung_2_1/raw/lung_2_1-cycle-01-channel-01.tif \
+  data/lung_2_1/out/lung_2_1-cycle-01-channel-01_direct_transf.txt \
+  data/lung_2_1/raw/lung_2_1-cycle-01-channel-01-registered.tif
+  
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_1/raw/lung_2_1-cycle-02-channel-01.tif \
+  data/lung_2_1/raw/lung_2_1-cycle-01-channel-02.tif \
+  data/lung_2_1/out/lung_2_1-cycle-01-channel-01_direct_transf.txt \
+  data/lung_2_1/raw/lung_2_1-cycle-01-channel-02-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_1/raw/lung_2_1-cycle-02-channel-01.tif \
+  data/lung_2_1/raw/lung_2_1-cycle-01-channel-03.tif \
+  data/lung_2_1/out/lung_2_1-cycle-01-channel-01_direct_transf.txt \
+  data/lung_2_1/raw/lung_2_1-cycle-01-channel-03-registered.tif
+
+java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar bunwarpj.bUnwarpJ_ -elastic_transform \
+  data/lung_2_1/raw/lung_2_1-cycle-02-channel-01.tif \
+  data/lung_2_1/raw/lung_2_1-cycle-01-channel-04.tif \
+  data/lung_2_1/out/lung_2_1-cycle-01-channel-01_direct_transf.txt \
+  data/lung_2_1/raw/lung_2_1-cycle-01-channel-04-registered.tif
+  
 nextflow run labsyspharm/mcmicro \
   --in ./data/lung_2_1 \
   --start-at probability-maps \
-  --unmicst-opts '--scalingFactor 1.7 --channel 0' \
+  --unmicst-opts '--scalingFactor 1.7 --channel 4' \
   --s3seg-opts '--logSigma 0 15' \
   -w ./work \
   -with-report "./reports/index.html"
@@ -198,7 +247,7 @@ java -Xmx512m -cp $IJDIR/jars/ij-1.53c.jar:$IJDIR/plugins/bUnwarpJ_-2.6.13.jar b
 nextflow run labsyspharm/mcmicro \
   --in ./data/lung_2_2 \
   --start-at probability-maps \
-  --unmicst-opts '--scalingFactor 1.5 --channel 0' \
+  --unmicst-opts '--scalingFactor 1.5 --channel 4' \
   --s3seg-opts '--logSigma 0 15' \
   -w ./work \
   -with-report "./reports/index.html"
@@ -208,7 +257,7 @@ nextflow run labsyspharm/mcmicro \
 
 Open the registered 12-channel TIFF in ImageJ to convert the Z-stack to a channel stack.
 - Image -> Hyperstacks -> Stack to Hyperstack
-- 12 channel slices, 1 z slice
+- 12 channel slices, 1 z slice, Composite display mode
 
 Convert TIFF files to OME-TIFF using bioformats
 
