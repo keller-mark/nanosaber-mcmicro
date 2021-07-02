@@ -78,6 +78,7 @@ def normalize_quantification(sample_ids, input_files, marker_files, output_files
   
   # Save each normalized sample df to file
   for sample_id, output_file in zip(sample_ids, output_files):
+    sample_id_to_df[sample_id]["CellID"] = sample_id_to_df[sample_id]["CellID"].astype(int)
     sample_id_to_df[sample_id].to_csv(output_file)
 
 if __name__ == "__main__":

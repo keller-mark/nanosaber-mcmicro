@@ -44,7 +44,32 @@ rule all:
     expand(
       join(DATA_DIR, "{sample_id}", "quantification", "unmicst-{sample_id}.normalized.csv"),
       sample_id=SAMPLE_IDS
+    ),
+    expand(
+      join(DATA_DIR, "{sample_id}", "quantification", "unmicst-{sample_id}.normalized.fcs"),
+      sample_id=SAMPLE_IDS
     )
+
+
+rule fcs_gating:
+  input:
+    expand(
+      join(DATA_DIR, "{sample_id}", "quantification", "unmicst-{sample_id}.normalized.fcs"),
+      sample_id=SAMPLE_IDS
+    )
+  output:
+    join(DATA_DIR, "{sample_id}", "quantification", "unmicst-{sample_id}.gating.png")
+  script:
+    join("src", "fcs_gating.py")
+
+rule csv_to_fcs:
+  input:
+    join(DATA_DIR, "{sample_id}", "quantification", "unmicst-{sample_id}.normalized.csv")
+  output:
+    join(DATA_DIR, "{sample_id}", "quantification", "unmicst-{sample_id}.normalized.fcs")
+  script:
+    join("src", "csv_to_fcs.R")
+
 
 rule normalize_quantification:
   input:
