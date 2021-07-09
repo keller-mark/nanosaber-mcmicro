@@ -74,7 +74,7 @@ rule csv_to_fcs:
 rule normalize_quantification:
   input:
     quantification=expand(
-      join(DATA_DIR, "{sample_id}", "quantification", "unmicst-{sample_id}.csv"),
+      join(DATA_DIR, "{sample_id}", "quantification", "unmicst-{sample_id}.filtered.csv"),
       sample_id=SAMPLE_IDS
     ),
     markers=expand(
@@ -90,7 +90,18 @@ rule normalize_quantification:
     )
   script:
     join("src", "normalize_quantification.py")
-    
+
+rule filter_quantification:
+  input:
+    quantification=join(DATA_DIR, "{sample_id}", "quantification", "unmicst-{sample_id}.csv"),
+    markers=join(DATA_DIR, "{sample_id}", "markers.csv")
+  params:
+    sample_ids=SAMPLE_IDS
+  output:
+    filtered_in=join(DATA_DIR, "{sample_id}", "quantification", "unmicst-{sample_id}.filtered.csv"),
+    filtered_out=join(DATA_DIR, "{sample_id}", "quantification", "unmicst-{sample_id}.filtered_out.csv")
+  script:
+    join("src", "filter_quantification.py")
     
 rule mcmicro:
   input:

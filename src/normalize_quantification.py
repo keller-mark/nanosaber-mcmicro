@@ -2,9 +2,10 @@ import os
 from os.path import join
 import pandas as pd
 import numpy as np
+from scipy.stats import iqr
 
 
-def normalize_quantification(sample_ids, input_files, marker_files, output_files):
+def normalize_quantification(sample_ids, input_files, marker_files, output_files, to_iqr=False):
   
   markers_df = pd.DataFrame(index=[], columns=["sample_id"])
   for sample_id, marker_file in zip(sample_ids, marker_files):
@@ -20,10 +21,7 @@ def normalize_quantification(sample_ids, input_files, marker_files, output_files
   
   sample_id_to_df = {}
   for sample_id in sample_ids:
-    sample_id_to_df[sample_id] = pd.read_csv(sample_id_to_input_file[sample_id])
-    
-  # TODO: filter out bad cells before the normalization
-  
+    sample_id_to_df[sample_id] = pd.read_csv(sample_id_to_input_file[sample_id], index_col=0)
   
   # Compute the extent for each marker
   for marker_id, marker_df in markers_df.groupby("marker_name"):
@@ -44,7 +42,10 @@ def normalize_quantification(sample_ids, input_files, marker_files, output_files
         else:
           marker_values[marker_id] = np.concatenate((marker_values[marker_id], quant_vals), axis=None)
     
-    marker_extents[marker_id] = (np.amin(marker_values[marker_id]), np.amax(marker_values[marker_id]))
+    if to_iqr:
+      marker_extents[marker_id] = (np.percentile(marker_values[marker_id], 25), np.percentile(marker_values[marker_id], 75))
+    else:
+      marker_extents[marker_id] = (np.amin(marker_values[marker_id]), np.amax(marker_values[marker_id]))
     
   
   # Normalize the sample quantification dataframe for each marker column
@@ -61,25 +62,42 @@ def normalize_quantification(sample_ids, input_files, marker_files, output_files
         
         quant_df = sample_id_to_df[sample_id].copy()
         quant_vals = quant_df[quant_col].values
-        
-        sample_min = np.amin(quant_vals)
-        sample_max = np.amax(quant_vals)
-        sample_range = (sample_max - sample_min)
-        
-        full_min = marker_extents[marker_id][0]
-        full_max = marker_extents[marker_id][1]
-        full_range = full_max - full_min
-        
-        # Normalize the column
-        quant_df[quant_col] = (quant_df[quant_col] * (full_range/sample_range)) - (full_min - sample_min)
-        
+
+        if to_iqr:
+          sample_25_pct = np.percentile(quant_vals, 25)
+          sample_75_pct = np.percentile(quant_vals, 75)
+          sample_range = (sample_75_pct - sample_25_pct)
+
+          full_25_pct = marker_extents[marker_id][0]
+          full_75_pct = marker_extents[marker_id][1]
+          full_range = full_75_pct - full_25_pct
+          
+          # Normalize the column
+          if sample_range > 0:
+            quant_df[quant_col] = (quant_df[quant_col] * (full_range/sample_range)) - (sample_25_pct - full_25_pct)
+
+        else:
+          sample_min = np.amin(quant_vals)
+          sample_max = np.amax(quant_vals)
+          sample_range = (sample_max - sample_min)
+          
+          full_min = marker_extents[marker_id][0]
+          full_max = marker_extents[marker_id][1]
+          full_range = full_max - full_min
+
+
+          
+          # Normalize the column
+          if sample_range > 0:
+            quant_df[quant_col] = (quant_df[quant_col] * (full_range/sample_range)) - (sample_min - full_min)
+          
         # Store the updated dataframe
         sample_id_to_df[sample_id] = quant_df
   
   # Save each normalized sample df to file
   for sample_id, output_file in zip(sample_ids, output_files):
-    sample_id_to_df[sample_id]["CellID"] = sample_id_to_df[sample_id]["CellID"].astype(int)
-    sample_id_to_df[sample_id].to_csv(output_file)
+    #sample_id_to_df[sample_id]["CellID"] = sample_id_to_df[sample_id]["CellID"].astype(int)
+    sample_id_to_df[sample_id].to_csv(output_file, index=True)
 
 if __name__ == "__main__":
   normalize_quantification(
