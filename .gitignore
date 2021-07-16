@@ -16,3 +16,4 @@ reports/
 backups/
 temp_plots/
 .snakemake/
+*.log

@@ -5,9 +5,16 @@ import numpy as np
 from scipy.stats import zscore
 
 
-def filter_quantification(input_file, marker_file, output_file, output_out_file):
+def filter_quantification(input_file, marker_file, output_file, output_out_file, sample_id):
   markers_df = pd.read_csv(marker_file)
   quant_df = pd.read_csv(input_file, index_col=0)
+
+  if sample_id == "lung_1_1":
+    # Fix the incorrect numbering of the DAPI columns for the lung 1.1
+    # image which lacks a DAPI channel for the first cycle.
+    quant_df["DAPI_3_cellMask"] = quant_df["DAPI_2_cellMask"]
+    quant_df["DAPI_2_cellMask"] = quant_df["DAPI_1_cellMask"]
+    quant_df = quant_df.drop(columns=["DAPI_1_cellMask"])
 
   filter_cols = [
     "Area",
@@ -41,6 +48,7 @@ if __name__ == "__main__":
     snakemake.input["markers"],
     snakemake.output["filtered_in"],
     snakemake.output["filtered_out"],
+    snakemake.wildcards["sample_id"]
   )
   
   
