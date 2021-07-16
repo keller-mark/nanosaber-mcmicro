@@ -8,7 +8,7 @@ O2_USER = "mk596"
 IS_O2 = (platform.system() == "Linux" and O2_USER != None)
 
 # Directory / file constants
-DATA_DIR = ("data" if not IS_O2 else join(os.sep, "n", "scratch3", "users", O2_USER[0], O2_USER, "lr", "data"))
+DATA_DIR = ("data" if not IS_O2 else join(os.sep, "n", "scratch3", "users", O2_USER[0], O2_USER, "nanosaber-mcmicro", "data"))
 
 FIJI_CMD = "java -jar -Xmx4096m /Applications/Fiji.app/jars/ij-1.53c.jar -ijpath /Applications/Fiji.app/ -batch"
 
@@ -112,12 +112,13 @@ rule mcmicro:
     seg_channel_index=(lambda w: 3 if w.sample_id == "lung_1_1" else 4)
   shell:
     """
-    nextflow run labsyspharm/mcmicro \
+    mkdir -p data/raw/work \
+    && nextflow run labsyspharm/mcmicro \
       --in ./data/{wildcards.sample_id} \
       --start-at probability-maps \
       --unmicst-opts '--scalingFactor 1.7 --channel {params.seg_channel_index}' \
       --s3seg-opts '--logSigma 0 15' \
-      -w ./work
+      -w ./data/raw/work
     """
 
 rule concatenate_stacked_registered:

@@ -29,9 +29,6 @@ def filter_quantification(input_file, marker_file, output_file, output_out_file)
 
     new_cols.append(f"{filter_col}_zscore")
     new_cols.append(f"{filter_col}_outliers")
-  
-  print(quant_df.head())
-
 
   quant_df = quant_df[list(set(quant_df.columns.values.tolist()) - set(new_cols))]
   

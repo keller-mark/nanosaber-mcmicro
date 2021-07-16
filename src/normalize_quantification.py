@@ -85,8 +85,6 @@ def normalize_quantification(sample_ids, input_files, marker_files, output_files
           full_max = marker_extents[marker_id][1]
           full_range = full_max - full_min
 
-
-          
           # Normalize the column
           if sample_range > 0:
             quant_df[quant_col] = (quant_df[quant_col] * (full_range/sample_range)) - (sample_min - full_min)

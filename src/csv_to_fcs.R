@@ -16,7 +16,6 @@ meta <- data.frame(name = column_names, desc = column_names)
 meta$range <- apply(apply(exprs_data[,column_names], 2, range), 2, diff)
 meta$minRange <- apply(exprs_data[,column_names], 2, min)
 meta$maxRange <- apply(exprs_data[,column_names], 2, max)
-head(meta)
 
 # flowFrame is the internal representation of a FCS file.
 matrix_exprs_data <- data.matrix(exprs_data[,column_names])

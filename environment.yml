@@ -19,6 +19,7 @@ dependencies:
   - scikit-learn
   - openpyxl
   - beautifulsoup4
+  - ipywidgets
   - pip
   - pip:
     - ashlar
