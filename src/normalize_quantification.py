@@ -29,8 +29,6 @@ def normalize_quantification(sample_ids, input_files, marker_files, output_files
       cycle_nums = sample_marker_df["cycle_number"].astype(int).tolist()
             
       for cycle_num in cycle_nums:
-        if sample_id == "lung_1_1":
-          cycle_num -= 1
         quant_col = f"{marker_id}_{cycle_num}_cellMask" if marker_id == "DAPI" else f"{marker_id}_cellMask"
         
         quant_df = sample_id_to_df[sample_id]
@@ -56,8 +54,6 @@ def normalize_quantification(sample_ids, input_files, marker_files, output_files
       print(sample_id, marker_id, cycle_nums)
       
       for cycle_num in cycle_nums:
-        if sample_id == "lung_1_1":
-          cycle_num -= 1
         quant_col = f"{marker_id}_{cycle_num}_cellMask" if marker_id == "DAPI" else f"{marker_id}_cellMask"
         
         quant_df = sample_id_to_df[sample_id].copy()
