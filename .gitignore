@@ -6,3 +6,14 @@ work/
 .nextflow/
 reports/
 .ipynb_checkpoints/
+.Rproj.user
+.Rproj
+*.Rproj
+*.fcs
+*.csv
+*.tif
+.Rhistory
+backups/
+temp_plots/
+.snakemake/
+*.log
