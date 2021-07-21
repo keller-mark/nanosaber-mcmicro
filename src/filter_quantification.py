@@ -20,22 +20,28 @@ def filter_quantification(input_file, marker_file, output_file, output_out_file,
     "Area",
   ]
 
-  new_cols = []
+  quant_df["to_remove"] = False
+
+  new_cols = [ "to_remove" ]
 
   zscore_threshold = 3.0
-
-  quant_out_df = pd.DataFrame()
 
   for filter_col in filter_cols:
     vals = quant_df[filter_col].values
     quant_df[f"{filter_col}_zscore"] = np.abs(zscore(vals))
     quant_df[f"{filter_col}_outliers"] = (quant_df[f"{filter_col}_zscore"] > zscore_threshold)
 
-    quant_out_df = quant_out_df.append(quant_df.loc[quant_df[f"{filter_col}_outliers"]], ignore_index=False)
-    quant_df = quant_df.loc[~quant_df[f"{filter_col}_outliers"]]
+    quant_df["to_remove"] = (quant_df["to_remove"]) | (quant_df[f"{filter_col}_outliers"])
 
     new_cols.append(f"{filter_col}_zscore")
     new_cols.append(f"{filter_col}_outliers")
+  
+  # TODO: Filter out cells which had quantification of zero for any DAPI channel
+
+  # TODO: Filter out cells which did not register well (DAPI quantification does not align across cycles)
+  
+  quant_df = quant_df.loc[~quant_df["to_remove"]]
+  quant_out_df = quant_df.loc[quant_df["to_remove"]]
 
   quant_df = quant_df[list(set(quant_df.columns.values.tolist()) - set(new_cols))]
   
